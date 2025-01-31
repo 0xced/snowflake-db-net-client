@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -24,17 +24,10 @@ namespace Snowflake.Client
         {
             _urlInfo = urlInfo;
             
-#if NETSTANDARD
-            _jsonSerializerOptions = new JsonSerializerOptions()
-            {
-                IgnoreNullValues = true
-            };
-#else
             _jsonSerializerOptions = new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-#endif
 
             _clientInfo = new ClientAppInfo();
         }
@@ -66,8 +59,7 @@ namespace Snowflake.Client
             };
 
             var requestBody = new LoginRequest() { Data = data };
-            var jsonBody = JsonSerializer.Serialize(requestBody, _jsonSerializerOptions);
-            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, jsonBody);
+            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, requestBody);
 
             return request;
         }
@@ -80,8 +72,7 @@ namespace Snowflake.Client
                 RequestId = requestId
             };
 
-            var jsonBody = JsonSerializer.Serialize(requestBody, _jsonSerializerOptions);
-            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, jsonBody);
+            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, requestBody);
 
             return request;
         }
@@ -95,8 +86,7 @@ namespace Snowflake.Client
                 RequestType = "RENEW"
             };
 
-            var jsonBody = JsonSerializer.Serialize(requestBody, _jsonSerializerOptions);
-            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, jsonBody, true);
+            var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, requestBody, true);
 
             return request;
         }
@@ -112,8 +102,7 @@ namespace Snowflake.Client
                 Bindings = ParameterBinder.BuildParameterBindings(sqlParams)
             };
 
-            var jsonBody = JsonSerializer.Serialize(requestBody, _jsonSerializerOptions);
-            var request = BuildJsonRequestMessage(queryUri, HttpMethod.Post, jsonBody);
+            var request = BuildJsonRequestMessage(queryUri, HttpMethod.Post, requestBody);
 
             return request;
         }
@@ -212,15 +201,20 @@ namespace Snowflake.Client
             return uriBuilder.Uri;
         }
 
-        private HttpRequestMessage BuildJsonRequestMessage(Uri uri, HttpMethod method, string jsonBody = null, bool useMasterToken = false)
+        private HttpRequestMessage BuildJsonRequestMessage(Uri uri, HttpMethod method, bool useMasterToken = false)
+        {
+            return BuildJsonRequestMessage<object>(uri, method, null, useMasterToken);
+        }
+
+        private HttpRequestMessage BuildJsonRequestMessage<T>(Uri uri, HttpMethod method, T requestBody = default, bool useMasterToken = false)
         {
             var request = new HttpRequestMessage();
             request.Method = method;
             request.RequestUri = uri;
 
-            if (jsonBody != null && method != HttpMethod.Get)
+            if (requestBody != null && method != HttpMethod.Get)
             {
-                request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                request.Content = JsonContent.Create(requestBody, options: _jsonSerializerOptions);
             }
 
             if (_sessionToken != null)

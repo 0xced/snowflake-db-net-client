@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Authentication;
 using System.Text.Json;
 using System.Threading;
@@ -44,14 +45,7 @@ namespace Snowflake.Client
             request.Headers.ExpectContinue = false;
             var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-
-#if NETSTANDARD
-            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-#else
-            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-#endif
-            
-            return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions);
+            return await response.Content.ReadFromJsonAsync<T>(_jsonSerializerOptions, ct).ConfigureAwait(false);
         }
     }
 }
