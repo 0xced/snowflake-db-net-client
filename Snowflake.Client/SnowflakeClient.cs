@@ -73,12 +73,6 @@ namespace Snowflake.Client
             if (settings == null)
                 throw new ArgumentException("Settings object cannot be null.");
 
-            if (string.IsNullOrEmpty(settings.AuthInfo?.User))
-                throw new ArgumentException("User name is either empty or null.");
-
-            if (string.IsNullOrEmpty(settings.AuthInfo?.Password))
-                throw new ArgumentException("User password is either empty or null.");
-
             if (string.IsNullOrEmpty(settings.AuthInfo?.Account))
                 throw new ArgumentException("Snowflake account is either empty or null.");
 
@@ -87,9 +81,6 @@ namespace Snowflake.Client
 
             if (string.IsNullOrEmpty(settings.UrlInfo?.Host))
                 throw new ArgumentException("URL Host cannot be empty.");
-
-            if (!settings.UrlInfo.Host.ToLower().EndsWith(".snowflakecomputing.com"))
-                throw new ArgumentException("URL Host should end up with '.snowflakecomputing.com'.");
         }
 
         /// <summary>
@@ -98,15 +89,16 @@ namespace Snowflake.Client
         /// <returns>True if session successfully initialized</returns>
         public async Task<bool> InitNewSessionAsync(CancellationToken ct = default)
         {
-            _snowflakeSession = await AuthenticateAsync(_clientSettings.AuthInfo, _clientSettings.SessionInfo, ct).ConfigureAwait(false);
+            _snowflakeSession = await AuthenticateAsync(ct).ConfigureAwait(false);
             _requestBuilder.SetSessionTokens(_snowflakeSession.SessionToken, _snowflakeSession.MasterToken);
 
             return true;
         }
 
-        private async Task<SnowflakeSession> AuthenticateAsync(AuthInfo authInfo, SessionInfo sessionInfo, CancellationToken ct)
+        private async Task<SnowflakeSession> AuthenticateAsync(CancellationToken ct)
         {
-            var loginRequest = _requestBuilder.BuildLoginRequest(authInfo, sessionInfo);
+            var loginRequestData = await _clientSettings.GetLoginRequestDataAsync(ct).ConfigureAwait(false);
+            var loginRequest = _requestBuilder.BuildLoginRequest(loginRequestData, _clientSettings.SessionInfo);
 
             var response = await _restClient.SendAsync<LoginResponse>(loginRequest, ct).ConfigureAwait(false);
 

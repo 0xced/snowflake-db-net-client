@@ -15,7 +15,6 @@ namespace Snowflake.Client
     {
         private readonly UrlInfo _urlInfo;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
-        private readonly ClientAppInfo _clientInfo;
 
         private string _masterToken;
         private string _sessionToken;
@@ -28,8 +27,6 @@ namespace Snowflake.Client
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-
-            _clientInfo = new ClientAppInfo();
         }
 
         internal void SetSessionTokens(string sessionToken, string masterToken)
@@ -44,20 +41,9 @@ namespace Snowflake.Client
             _masterToken = null;
         }
 
-        internal HttpRequestMessage BuildLoginRequest(AuthInfo authInfo, SessionInfo sessionInfo)
+        internal HttpRequestMessage BuildLoginRequest(LoginRequestData data, SessionInfo sessionInfo)
         {
             var requestUri = BuildLoginUrl(sessionInfo);
-
-            var data = new LoginRequestData()
-            {
-                LoginName = authInfo.User,
-                Password = authInfo.Password,
-                AccountName = authInfo.Account,
-                ClientAppId = _clientInfo.DriverName,
-                ClientAppVersion = _clientInfo.DriverVersion,
-                ClientEnvironment = _clientInfo.Environment
-            };
-
             var requestBody = new LoginRequest() { Data = data };
             var request = BuildJsonRequestMessage(requestUri, HttpMethod.Post, requestBody);
 
@@ -224,9 +210,10 @@ namespace Snowflake.Client
             }
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/snowflake"));
-            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(_clientInfo.DriverName, _clientInfo.DriverVersion));
-            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(_clientInfo.Environment.OSVersion));
-            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(_clientInfo.Environment.NETRuntime, _clientInfo.Environment.NETVersion));
+            var clientInfo = ClientAppInfo.Instance;
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(clientInfo.DriverName, clientInfo.DriverVersion));
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(clientInfo.Environment.OSVersion));
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue(clientInfo.Environment.NETRuntime, clientInfo.Environment.NETVersion));
 
             return request;
         }

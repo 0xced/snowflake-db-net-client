@@ -1,14 +1,15 @@
 ﻿using System.Text.Json.Serialization;
+using Snowflake.Client.Model;
 
 namespace Snowflake.Client.Json
 {
     public class LoginRequestData
     {
         [JsonPropertyName("CLIENT_APP_ID")]
-        public string ClientAppId { get; set; }
+        public string ClientAppId { get; set; } = ClientAppInfo.Instance.DriverName;
 
         [JsonPropertyName("CLIENT_APP_VERSION")]
-        public string ClientAppVersion { get; set; }
+        public string ClientAppVersion { get; set; } = ClientAppInfo.Instance.DriverVersion;
 
         [JsonPropertyName("ACCOUNT_NAME")]
         public string AccountName { get; set; }
@@ -23,7 +24,7 @@ namespace Snowflake.Client.Json
         public string Authenticator { get; set; }
 
         [JsonPropertyName("CLIENT_ENVIRONMENT")]
-        public LoginRequestClientEnv ClientEnvironment { get; set; }
+        public LoginRequestClientEnv ClientEnvironment { get; set; } = ClientAppInfo.Instance.Environment;
 
         [JsonPropertyName("RAW_SAML_RESPONSE")]
         public string RawSamlResponse { get; set; }

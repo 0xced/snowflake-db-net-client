@@ -1,6 +1,9 @@
 ﻿using Snowflake.Client.Helpers;
 using System;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using Snowflake.Client.Json;
 
 namespace Snowflake.Client.Model
 {
@@ -55,6 +58,31 @@ namespace Snowflake.Client.Model
             UrlInfo.Host = string.IsNullOrEmpty(UrlInfo.Host)
                 ? BuildHostName(AuthInfo.Account, AuthInfo.Region)
                 : ReplaceUnderscores(UrlInfo.Host);
+        }
+
+        /// <summary>
+        /// Creates the login request data used to log in into Snowflake.
+        /// </summary>
+        /// <returns>The <see cref="LoginRequestData"/> used to log in into Snowflake.</returns>
+        /// <remarks>
+        /// This method can be overriden to perform a login which is not based on the user and password.
+        /// For example, it can be used to perform an SSO login by setting the <see cref="LoginRequestData.Token"/> property.
+        /// </remarks>
+        protected internal virtual Task<LoginRequestData> GetLoginRequestDataAsync(CancellationToken ct)
+        {
+            if (string.IsNullOrEmpty(AuthInfo.User))
+                throw new InvalidOperationException($"The user must be specified in the {nameof(Model.AuthInfo)}.");
+
+            if (string.IsNullOrEmpty(AuthInfo.Password))
+                throw new InvalidOperationException($"The password must be specified in the {nameof(Model.AuthInfo)}.");
+
+            var loginRequestData = new LoginRequestData
+            {
+                LoginName = AuthInfo.User,
+                Password = AuthInfo.Password,
+                AccountName = AuthInfo.Account,
+            };
+            return Task.FromResult(loginRequestData);
         }
 
         private static string BuildHostName(string account, string region)

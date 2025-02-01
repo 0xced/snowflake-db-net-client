@@ -4,6 +4,8 @@ namespace Snowflake.Client.Model
 {
     public class ClientAppInfo
     {
+        internal static readonly ClientAppInfo Instance = new ClientAppInfo();
+
         public string DriverName { get; }
         public string DriverVersion { get; }
         public LoginRequestClientEnv Environment { get; }
