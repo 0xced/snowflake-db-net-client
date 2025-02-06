@@ -15,12 +15,13 @@ public class BrowserAuthenticatorSettings : SnowflakeClientSettings
 {
     private readonly BrowserAuthenticator _authenticator;
 
-    public BrowserAuthenticatorSettings(AuthInfo authInfo, SessionInfo? sessionInfo = null, UrlInfo? urlInfo = null,
+    public BrowserAuthenticatorSettings(AuthInfo authInfo, BrowserAuthenticatorFavicon? favicon = null, string? appName = null,
+        SessionInfo? sessionInfo = null, UrlInfo? urlInfo = null,
         JsonSerializerOptions? jsonMapperOptions = null, ChunksDownloaderOptions? chunksDownloaderOptions = null,
         bool downloadChunksForQueryRawResponses = false)
         : base(authInfo, sessionInfo, urlInfo, jsonMapperOptions, chunksDownloaderOptions, downloadChunksForQueryRawResponses)
     {
-        _authenticator = new BrowserAuthenticator(UrlInfo);
+        _authenticator = new BrowserAuthenticator(UrlInfo, favicon, appName ?? "the Snowflake .NET client");
     }
 
     /// <summary>
