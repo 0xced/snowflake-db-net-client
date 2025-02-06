@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Benchmarks", "Snowflake.Client.Benchmarks\Snowflake.Client.Benchmarks.csproj", "{C9F6FB48-6340-4407-A466-4545BA003C6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentication.Browser", "Snowflake.Client.Authentication.Browser\Snowflake.Client.Authentication.Browser.csproj", "{35DF0AA5-A1C9-4525-BC52-4B1A8511C8F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentication.OAuth", "Snowflake.Client.Authentication.OAuth\Snowflake.Client.Authentication.OAuth.csproj", "{D2E14AEA-4235-4CAA-AFAD-012823200E15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{35DF0AA5-A1C9-4525-BC52-4B1A8511C8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35DF0AA5-A1C9-4525-BC52-4B1A8511C8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35DF0AA5-A1C9-4525-BC52-4B1A8511C8F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
