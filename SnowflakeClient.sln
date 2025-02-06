@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentication.OAuth", "Snowflake.Client.Authentication.OAuth\Snowflake.Client.Authentication.OAuth.csproj", "{D2E14AEA-4235-4CAA-AFAD-012823200E15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowflake", "snowflake\snowflake.csproj", "{B8ED3068-265A-4C27-979C-8A1B823E51EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2E14AEA-4235-4CAA-AFAD-012823200E15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
