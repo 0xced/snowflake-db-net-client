@@ -14,8 +14,6 @@ internal class TokenApplication(Func<string, Task> tokenCallback, BrowserAuthent
 {
     internal record Context(IFeatureCollection Features);
 
-    private string? _token;
-
     public Context CreateContext(IFeatureCollection contextFeatures) => new(contextFeatures);
 
     public void DisposeContext(Context context, Exception? exception) {}
@@ -26,19 +24,9 @@ internal class TokenApplication(Func<string, Task> tokenCallback, BrowserAuthent
 
         if (httpContext.Request.Path == "/")
         {
-            _token = httpContext.Request.Query["token"].ToString();
+            var token = httpContext.Request.Query["token"].ToString();
             await WriteResponseAsync(httpContext, favicon, appName).ConfigureAwait(false);
-            if (favicon == null)
-            {
-                await tokenCallback(_token).ConfigureAwait(false);
-            }
-        }
-        else if (httpContext.Request.Path == favicon?.Path)
-        {
-            httpContext.Response.ContentType = favicon.ContentType;
-            httpContext.Response.ContentLength = favicon.Content.Length;
-            await httpContext.Response.BodyWriter.WriteAsync(favicon.Content).ConfigureAwait(false);
-            await tokenCallback(_token ?? "").ConfigureAwait(false);
+            await tokenCallback(token).ConfigureAwait(false);
         }
         else
         {
@@ -56,7 +44,9 @@ internal class TokenApplication(Func<string, Task> tokenCallback, BrowserAuthent
         writer.Write("    <title>Authentication Response from Snowflake</title>\n"u8);
         if (favicon != null)
         {
-            writer.Write(Encoding.UTF8.GetBytes($"    <link rel=\"icon\" type=\"{favicon.ContentType}\" href=\"{favicon.Path}\">\n"));
+            // Doesn't work with Safari, see https://bugs.webkit.org/show_bug.cgi?id=236616 and https://github.com/case/safari-favicons-base64
+            var iconData = Convert.ToBase64String(favicon.Content);
+            writer.Write(Encoding.UTF8.GetBytes($"    <link rel=\"icon\" type=\"{favicon.ContentType}\" href=\"data:{favicon.ContentType};base64,{iconData}\">\n"));
         }
         writer.Write("  </head>\n"u8);
         writer.Write("  <body>\n"u8);
