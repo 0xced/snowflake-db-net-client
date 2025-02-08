@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Snowflake.Client</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BeetleX.FastHttpApi" Version="2.2.24.425" />
+  </ItemGroup>
+
+  <ItemGroup>
+<!--    <ProjectReference Include="..\..\FastHttpApi\src\BeetleX.FastHttpApi.csproj" />-->
+    <ProjectReference Include="..\Snowflake.Client.Authentication.Browser\Snowflake.Client.Authentication.Browser.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Snowflake.Client.Authentication.Browser\Snowflake.Client.Authentication.Browser.csproj" />
+    <ProjectReference Include="..\Snowflake.Client.Authentication.Browser.BeetleX\Snowflake.Client.Authentication.Browser.BeetleX.csproj" />
+    <ProjectReference Include="..\Snowflake.Client.Authentication.Browser.Kestrel\Snowflake.Client.Authentication.Browser.Kestrel.csproj" />
     <ProjectReference Include="..\Snowflake.Client.Authentication.OAuth\Snowflake.Client.Authentication.OAuth.csproj" />
   </ItemGroup>
 

@@ -1,24 +1,16 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Snowflake.Client.Model;
 
 namespace Snowflake.Client;
 
-internal class BrowserAuthenticator(UrlInfo urlInfo, BrowserAuthenticatorFavicon? favicon, string appName)
+internal class BrowserAuthenticator(TokenWebServer webServer, UrlInfo urlInfo)
 {
     private static readonly HttpClient HtpClient = new();
 
@@ -26,12 +18,7 @@ internal class BrowserAuthenticator(UrlInfo urlInfo, BrowserAuthenticatorFavicon
     {
         var channel = Channel.CreateBounded<string>(1);
 
-        using var server = CreateServer();
-
-        var app = new TokenApplication(token => channel.Writer.WriteAsync(token, ct).AsTask(), favicon, appName);
-        await server.StartAsync(app, ct).ConfigureAwait(false);
-        var address = server.Features.GetRequiredFeature<IServerAddressesFeature>().Addresses.First();
-        var port = address[(address.LastIndexOf(':') + 1)..];
+        var port = await webServer.StartAsync(token => channel.Writer.WriteAsync(token, ct).AsTask(), ct).ConfigureAwait(false);
 
         // See https://github.com/snowflakedb/snowflake-connector-net/blob/v4.3.0/Snowflake.Data/Core/Session/SFSessionProperty.cs#L296-L299
         var accountName = urlInfo.Host.Split('.')[0];
@@ -41,27 +28,19 @@ internal class BrowserAuthenticator(UrlInfo urlInfo, BrowserAuthenticatorFavicon
 
         var token = await GetTokenAsync(channel.Reader, timeout, ct).ConfigureAwait(false);
 
-        await server.StopAsync(ct).ConfigureAwait(false);
+        await webServer.StopAsync(ct).ConfigureAwait(false);
 
         return (token, proofKey);
     }
 
-    private static KestrelServer CreateServer()
-    {
-        var serverOptions = new KestrelServerOptions();
-        serverOptions.Listen(IPAddress.Loopback, 0);
-        var transportFactory = new SocketTransportFactory(Options.Create(new SocketTransportOptions()), NullLoggerFactory.Instance);
-        return new KestrelServer(Options.Create(serverOptions), transportFactory, NullLoggerFactory.Instance);
-    }
-
-    private async Task<(string SsoUrl, string ProofKey)> AuthenticateAsync(string accountName, string port, CancellationToken ct)
+    private async Task<(string SsoUrl, string ProofKey)> AuthenticateAsync(string accountName, int port, CancellationToken ct)
     {
         var requestUri = $"{urlInfo}/session/authenticator-request";
 
         AuthenticatorResponse? authResponse;
         try
         {
-            var requestData = new AuthenticatorRequestData(accountName, port);
+            var requestData = new AuthenticatorRequestData(accountName, port.ToString());
             var response = await HtpClient.PostAsJsonAsync(requestUri, new AuthenticatorRequest(requestData), ct).ConfigureAwait(false);
             authResponse = await response.Content.ReadFromJsonAsync<AuthenticatorResponse>(ct).ConfigureAwait(false);
         }

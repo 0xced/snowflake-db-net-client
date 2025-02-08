@@ -99,6 +99,9 @@ public class DefaultCommand(IAnsiConsole console, CancellationToken cancellation
             Region = settings.Region,
         };
 
-        return new BrowserAuthenticatorSettings(authInfo, settings.Favicon, appName: "the snowflake CLI");
+        // var server = new KestrelWebServer(settings.Favicon, appName: "the snowflake CLI");
+        // var server = new BeetleXWebServer(settings.Favicon, appName: "the snowflake CLI");
+        var server = new TcpListenerTokenWebServer(settings.Favicon, appName: "the snowflake CLI");
+        return new BrowserAuthenticatorSettings(server, authInfo);
     }
 }

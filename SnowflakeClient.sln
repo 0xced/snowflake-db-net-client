@@ -15,6 +15,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowflake", "snowflake\snowflake.csproj", "{B8ED3068-265A-4C27-979C-8A1B823E51EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentication.Browser.BeetleX", "Snowflake.Client.Authentication.Browser.BeetleX\Snowflake.Client.Authentication.Browser.BeetleX.csproj", "{C8F83A51-C418-45B9-8344-751B30162CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snowflake.Client.Authentication.Browser.Kestrel", "Snowflake.Client.Authentication.Browser.Kestrel\Snowflake.Client.Authentication.Browser.Kestrel.csproj", "{A473FF2A-F24D-4A04-A7E1-9843CC0ACFD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeetleX", "..\BeetleX\src\BeetleX\BeetleX.csproj", "{F23016C7-FE45-4430-8EBB-E63178F52401}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeetleX.FastHttpApi", "..\FastHttpApi\src\BeetleX.FastHttpApi.csproj", "{D7B4896E-E6FC-40C2-A6D2-717B88763648}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +53,22 @@ Global
 		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8ED3068-265A-4C27-979C-8A1B823E51EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F83A51-C418-45B9-8344-751B30162CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F83A51-C418-45B9-8344-751B30162CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F83A51-C418-45B9-8344-751B30162CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F83A51-C418-45B9-8344-751B30162CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A473FF2A-F24D-4A04-A7E1-9843CC0ACFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A473FF2A-F24D-4A04-A7E1-9843CC0ACFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A473FF2A-F24D-4A04-A7E1-9843CC0ACFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A473FF2A-F24D-4A04-A7E1-9843CC0ACFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F23016C7-FE45-4430-8EBB-E63178F52401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F23016C7-FE45-4430-8EBB-E63178F52401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F23016C7-FE45-4430-8EBB-E63178F52401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F23016C7-FE45-4430-8EBB-E63178F52401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B4896E-E6FC-40C2-A6D2-717B88763648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B4896E-E6FC-40C2-A6D2-717B88763648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B4896E-E6FC-40C2-A6D2-717B88763648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B4896E-E6FC-40C2-A6D2-717B88763648}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
